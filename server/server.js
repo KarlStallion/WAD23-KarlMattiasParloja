@@ -40,3 +40,18 @@ app.get('/api/courses/:id', async(req, res) => {
     }
 });
 
+app.put('/api/courses/:id', async(req, res) => {
+    try {
+        console.log("A PUT request has arrived");
+        const { id } = req.params;
+        const { studentsnumbers, groupsnumbers, description } = req.body;
+        const course = await pool.query(
+            "UPDATE courses SET studentsnumbers = $1, groupsnumbers = $2, description = $3 WHERE id = $4",
+            [studentsnumbers, groupsnumbers, description, id]
+        );
+        res.json("You got through");
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+

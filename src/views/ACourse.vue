@@ -1,18 +1,17 @@
 <template>
-<div class="A Course">
-  <div class="form" v-for="course in course" :key="course.id">
-    <h3>{{ course.coursename }} - {{ course.coursecode }} - {{ course.courseects }} ECTS</h3>
-    <label>Max Number Of Students: </label>
-    <input type="text" :placeholder="course.studentsnumbers"/>
-    <label>Number of Groups: </label>
-    <input type="text" :placeholder="course.groupsnumbers" />
-    <label>Course Decription: </label>
-    <input type="text" :placeholder="course.description" />
+  <div class="A Course">
+    <div class="form" v-for="course in course" :key="course.id">
+      <h3>{{ course.coursename }} - {{ course.coursecode }} - {{ course.courseects }} ECTS</h3>
+      <label>Max Number Of Students: </label>
+      <input type="text" :placeholder="course.studentsnumbers" v-model="studentsnumbers"/>
+      <label>Number of Groups: </label>
+      <input type="text" :placeholder="course.groupsnumbers" v-model="groupsnumbers"/>
+      <label>Course Decription: </label>
+      <input type="text" :placeholder="course.description" v-model="description"/>
+      <button @click="updateCourse">Update Course</button>
+    </div>
   </div>
-
-</div>
 </template>
-
 
 <script>
 export default {
@@ -20,6 +19,9 @@ export default {
   data() {
     return {
       course: [],
+      studentsnumbers: '',
+      groupsnumbers: '',
+      description: '',
     };
   },
   methods: {
@@ -32,6 +34,28 @@ export default {
             console.log(this.course);
           })
           .catch((err) => console.log(err.message));
+    },
+
+    updateCourse() {
+      const id = this.$route.params.id;
+      fetch(`http://localhost:3000/api/courses/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          studentsnumbers: this.studentsnumbers || this.course.description,
+          groupsnumbers: this.groupsnumbers || this.course.description,
+          description: this.description || this.course.description,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          this.fetchRecords();
+          this.$router.push('/Courses');
+        })
+        .catch((err) => console.log(err.message));
     },
   },
   mounted() {
@@ -73,6 +97,9 @@ input {
   text-align: center;
 }
 button {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
   background: rgb(8, 110, 110);
   border: 0;
   padding: 10px 20px;
