@@ -5,7 +5,7 @@
     <table>
         <tr class="item" v-for="course in courses" :key="course.id">
           <td><p>Course name: </p>{{ course.coursename }} </td>
-          <td><p>Code: </p>{{ course.coursecode}} </td>
+          <td><p>Code: </p><router-link :to="{ name: 'ACourse', params: { id: course.id } }"> {{ course.coursecode }} </router-link></td>
           <td><p>ECTS: </p>{{ course.courseects}} </td>
           <td><p>Max No. of Students: </p> {{ course.studentsnumbers }} </td>
           <td><p>No. of groups: </p>{{ course.groupsnumbers }} </td>
