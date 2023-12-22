@@ -5,10 +5,10 @@
       <label>Max Number Of Students: </label>
       <input type="text" :placeholder="course.studentsnumbers" v-model="studentsnumbers"/>
       <label>Number of Groups: </label>
-      <input type="text" :placeholder="course.groupsnumbers" v-model="groupsnumbers"/>
+      <input type="text" :placeholder="course.groupsnumbers" v-model="groupsnumbers" :class="{ 'over30': isOver30 }"/>
       <label>Course Decription: </label>
       <input type="text" :placeholder="course.description" v-model="description"/>
-      <button @click="updateCourse">Update Course</button>
+      <button @click="updateCourse" :disabled="isOver30">Update Course</button>
     </div>
   </div>
 </template>
@@ -23,6 +23,11 @@ export default {
       groupsnumbers: '',
       description: '',
     };
+  },
+  computed: {
+    isOver30() {
+      return this.groupsnumbers > 30;
+    }
   },
   methods: {
     fetchRecords() {
@@ -112,5 +117,13 @@ button {
 
 ::placeholder {
   text-align: center;
+}
+
+.over30 {
+  background-color: red;
+}
+
+button:disabled {
+  background-color: grey;
 }
 </style>
